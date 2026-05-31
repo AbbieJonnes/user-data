@@ -1,3 +1,4 @@
+
 /* =========================
    DARK MODE SYSTEM
 ========================= */
@@ -16,7 +17,7 @@ function applyTheme(theme) {
   let savedTheme = localStorage.getItem("theme") || "light";
   applyTheme(savedTheme);
   
-  // Toggle theme (NO ICONS)
+  // Toggle theme
   document.addEventListener("click", function (e) {
     if (e.target.id === "themeToggle") {
   
@@ -43,11 +44,12 @@ function applyTheme(theme) {
     e.preventDefault();
   
     const name = document.getElementById("name").value;
-    const age = document.getElementById("age").value;
+    const age = parseInt(document.getElementById("age").value);
   
     localStorage.setItem("userName", name);
     localStorage.setItem("userAge", age);
   
+    // IMPORTANT: make sure file name is correct
     window.location.href = "quote.html";
   });
   
@@ -59,7 +61,7 @@ function applyTheme(theme) {
   function loadQuotesPage() {
   
     const name = localStorage.getItem("userName");
-    const age = localStorage.getItem("userAge");
+    const age = parseInt(localStorage.getItem("userAge"));
   
     if (!name || !age) return;
   
@@ -69,18 +71,26 @@ function applyTheme(theme) {
     document.getElementById("ageMonths").innerText =
       `You are ${age * 12} months old`;
   
-    document.getElementById("adultMsg").innerText =
-      age >= 18
-        ? "You can access adult content"
-        : "You are too young for adult content";
+    let message = "";
+    let quote = "";
   
-    let quotes = "";
-  
-    for (let i = 1; i <= 5; i++) {
-      quotes += `<p class="bg-gray-100 p-2 rounded">Believe in yourself</p>`;
+    if (age < 18) {
+      message = "You are too young for adult content";
+      quote = "Believe in yourself";
+    } else {
+      message = "You can access adult content";
+      quote = "Keep pushing, you got this";
     }
   
-    document.getElementById("quotes").innerHTML = quotes;
+    document.getElementById("adultMsg").innerText = message;
+  
+    let quotesHTML = "";
+  
+    for (let i = 1; i <= 5; i++) {
+      quotesHTML += `<p class="bg-gray-100 p-2 rounded">${quote}</p>`;
+    }
+  
+    document.getElementById("quotes").innerHTML = quotesHTML;
   }
   
   loadQuotesPage();
